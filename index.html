@@ -1,223 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Аренда квартир</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Подключаем Swiper для слайдера -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <style>
-        /* CSS добавим ниже */
-        body {
-    font-family: Arial;
-    margin: 0;
-    padding: 20px;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.swiper-container {
-    width: 100%;
-    height: 400px;
-    margin: 20px 0;
-}
-
-.swiper-slide {
-    text-align: center;
-    background: #f0f0f0;
-}
-
-.swiper-slide img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.filters {
-    margin: 20px 0;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-#apartments-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.apartment-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-}
-
-.popup-content {
-    background: white;
-    margin: 15% auto;
-    padding: 20px;
-    width: 300px;
-}
+        .apartment {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
-    <!-- Шапка -->
-    <header>
-        <h1>Аренда квартир</h1>
-        <div id="auth-buttons">
-            <button onclick="showLogin()">Войти</button>
-            <button onclick="showRegister()">Регистрация</button>
-        </div>
-    </header>
-
-    <!-- Фильтры -->
-    <div class="filters">
-        <select id="rooms">
-            <option value="">Количество комнат</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
-        
-        <input type="number" id="maxPrice" placeholder="Макс. цена">
-        
-        <button onclick="filterApartments()">Найти</button>
+    <div class="apartment">
+        <h2>Уютная 1-комнатная</h2>
+        <p>Цена: 25 000 руб./мес</p>
+        <button onclick="showPhone()">Показать телефон</button>
+        <p id="phone" style="display: none;">+7 (XXX) XXX-XX-XX</p>
     </div>
 
-    <!-- Слайдер -->
-    <div class="swiper-container">
-        <div class="swiper-wrapper" id="slider-wrapper">
-            <!-- Сюда вставим слайды через JS -->
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-
-    <!-- Список квартир -->
-    <div id="apartments-list"></div>
-
-    <!-- Попап авторизации -->
-    <div id="auth-popup" class="popup">
-        <div class="popup-content">
-            <span onclick="closeAuth()" class="close">&times;</span>
-            <h2 id="popup-title"></h2>
-            <input type="text" id="auth-email" placeholder="Email">
-            <input type="password" id="auth-password" placeholder="Пароль">
-            <button onclick="handleAuth()">Подтвердить</button>
-        </div>
-    </div>
-
-    <!-- Подключаем JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
-        // JS добавим ниже
-        // Данные квартир (можно заменить на загрузку с сервера)
-const apartments = [
-    {
-        id: 1,
-        images: ['https://via.placeholder.com/600x400', 'https://via.placeholder.com/600x400/FF0000'],
-        price: 30000,
-        rooms: 2,
-        area: 65,
-        address: 'ул. Примерная, 1',
-        description: 'Уютная квартира в центре'
-    },
-    // Добавь другие объекты...
-];
-
-// Инициализация слайдера
-const swiper = new Swiper('.swiper-container', {
-    pagination: { el: '.swiper-pagination' },
-    loop: true,
-});
-
-// Заполняем слайдер
-function initSlider() {
-    const wrapper = document.getElementById('slider-wrapper');
-    apartments.forEach(apartment => {
-        wrapper.innerHTML += `
-            <div class="swiper-slide">
-                <img src="${apartment.images[0]}" alt="Квартира">
-                <h3>${apartment.price} руб./мес</h3>
-            </div>
-        `;
-    });
-    swiper.update(); // Обновить слайдер
-}
-
-// Фильтрация квартир
-function filterApartments() {
-    const rooms = document.getElementById('rooms').value;
-    const maxPrice = document.getElementById('maxPrice').value;
-    
-    const filtered = apartments.filter(apartment => {
-        return (!rooms || apartment.rooms == rooms) &&
-               (!maxPrice || apartment.price <= maxPrice);
-    });
-    
-    showApartments(filtered);
-}
-
-// Показ списка квартир
-function showApartments(apartments) {
-    const list = document.getElementById('apartments-list');
-    list.innerHTML = '';
-    apartments.forEach(apartment => {
-        list.innerHTML += `
-            <div class="apartment-card">
-                <h3>${apartment.price} руб./мес</h3>
-                <p>Комнат: ${apartment.rooms}</p>
-                <p>Площадь: ${apartment.area} м²</p>
-                <p>${apartment.address}</p>
-                <p>${apartment.description}</p>
-            </div>
-        `;
-    });
-}
-
-// Авторизация (упрощённая версия)
-let currentUser = null;
-
-function showLogin() {
-    document.getElementById('popup-title').textContent = 'Вход';
-    document.getElementById('auth-popup').style.display = 'block';
-}
-
-function showRegister() {
-    document.getElementById('popup-title').textContent = 'Регистрация';
-    document.getElementById('auth-popup').style.display = 'block';
-}
-
-function closeAuth() {
-    document.getElementById('auth-popup').style.display = 'none';
-}
-
-function handleAuth() {
-    const email = document.getElementById('auth-email').value;
-    const password = document.getElementById('auth-password').value;
-    currentUser = email; // Здесь должна быть проверка через бэкенд
-    alert(`Добро пожаловать, ${email}!`);
-    closeAuth();
-}
-
-// Запуск при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    initSlider();
-    showApartments(apartments);
-});
+        function showPhone() {
+            document.getElementById('phone').style.display = 'block';
+        }
     </script>
 </body>
 </html>
