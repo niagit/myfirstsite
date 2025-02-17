@@ -7,11 +7,124 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <style>
         /* CSS добавим ниже */
+        body {
+    font-family: Arial;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 400px;
+    margin: 20px 0;
+}
+
+.swiper-slide {
+    text-align: center;
+    background: #f0f0f0;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.filters {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#apartments-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.apartment-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.popup-content {
+    background: white;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+}
     </style>
 </head>
-<script>
+<body>
+    <!-- Шапка -->
+    <header>
+        <h1>Аренда квартир</h1>
+        <div id="auth-buttons">
+            <button onclick="showLogin()">Войти</button>
+            <button onclick="showRegister()">Регистрация</button>
+        </div>
+    </header>
 
-   // Данные квартир (можно заменить на загрузку с сервера)
+    <!-- Фильтры -->
+    <div class="filters">
+        <select id="rooms">
+            <option value="">Количество комнат</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        
+        <input type="number" id="maxPrice" placeholder="Макс. цена">
+        
+        <button onclick="filterApartments()">Найти</button>
+    </div>
+
+    <!-- Слайдер -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper" id="slider-wrapper">
+            <!-- Сюда вставим слайды через JS -->
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Список квартир -->
+    <div id="apartments-list"></div>
+
+    <!-- Попап авторизации -->
+    <div id="auth-popup" class="popup">
+        <div class="popup-content">
+            <span onclick="closeAuth()" class="close">&times;</span>
+            <h2 id="popup-title"></h2>
+            <input type="text" id="auth-email" placeholder="Email">
+            <input type="password" id="auth-password" placeholder="Пароль">
+            <button onclick="handleAuth()">Подтвердить</button>
+        </div>
+    </div>
+
+    <!-- Подключаем JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // JS добавим ниже
+        // Данные квартир (можно заменить на загрузку с сервера)
 const apartments = [
     {
         id: 1,
@@ -105,126 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlider();
     showApartments(apartments);
 });
-</script>
-   
-<body>
-    <!-- Шапка -->
-    <header>
-       <style>
-
-          body {
-    font-family: Arial;
-    margin: 0;
-    padding: 20px;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.swiper-container {
-    width: 100%;
-    height: 400px;
-    margin: 20px 0;
-}
-
-.swiper-slide {
-    text-align: center;
-    background: #f0f0f0;
-}
-
-.swiper-slide img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.filters {
-    margin: 20px 0;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-#apartments-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.apartment-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-}
-
-.popup-content {
-    background: white;
-    margin: 15% auto;
-    padding: 20px;
-    width: 300px;
-}
-       </style>
-        <h1>Аренда квартир</h1>
-        <div id="auth-buttons">
-            <button onclick="showLogin()">Войти</button>
-            <button onclick="showRegister()">Регистрация</button>
-        </div>
-    </header>
-
-    <!-- Фильтры -->
-    <div class="filters">
-        <select id="rooms">
-            <option value="">Количество комнат</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
-        
-        <input type="number" id="maxPrice" placeholder="Макс. цена">
-        
-        <button onclick="filterApartments()">Найти</button>
-    </div>
-
-    <!-- Слайдер -->
-    <div class="swiper-container">
-        <div class="swiper-wrapper" id="slider-wrapper">
-            <!-- Сюда вставим слайды через JS -->
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-
-    <!-- Список квартир -->
-    <div id="apartments-list"></div>
-
-    <!-- Попап авторизации -->
-    <div id="auth-popup" class="popup">
-        <div class="popup-content">
-            <span onclick="closeAuth()" class="close">&times;</span>
-            <h2 id="popup-title"></h2>
-            <input type="text" id="auth-email" placeholder="Email">
-            <input type="password" id="auth-password" placeholder="Пароль">
-            <button onclick="handleAuth()">Подтвердить</button>
-        </div>
-    </div>
-
-    <!-- Подключаем JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        // JS добавим ниже
     </script>
 </body>
 </html>
