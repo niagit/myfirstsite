@@ -1,1 +1,21 @@
-
+<!DOCTYPE html>
+   <html>
+   <head>
+       <title>учебный справочник объектов</title>
+       <style>
+   body {
+       background: #f0f0f0;
+       font-family: Arial;
+   }
+   h1 {
+       color: blue;
+   }
+   </style>
+   </head>
+<script>
+   alert('ий чоңкулак, жакшы көрөм го сени!');
+   </script>
+   <body>
+       <h1>привет, Макусь, теперь текст синий :)</h1>
+   </body>
+   </html>
